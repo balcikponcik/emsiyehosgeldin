@@ -40,15 +40,13 @@ button:focus-visible{outline:3px solid var(--orange);outline-offset:3px}
   font-family:var(--title);font-weight:700;font-size:24px;letter-spacing:.03em;box-shadow:0 5px 0 #c97a17,0 8px 18px var(--shadow);transition:transform .1s,box-shadow .1s}
 .draw:active{transform:translateY(4px);box-shadow:0 1px 0 #c97a17,0 3px 8px var(--shadow)}
 ol.tasks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:18px}
-.task{display:grid;grid-template-columns:auto auto 1fr auto;align-items:start;gap:14px}
+.task{display:grid;grid-template-columns:auto auto 1fr;align-items:start;gap:14px}
 .box{width:44px;height:44px;border-radius:3px;background:var(--box);color:var(--box-ink);display:grid;place-items:center;padding:0;box-shadow:0 2px 0 var(--shadow)}
 .box svg{width:30px;height:30px;opacity:0;transform:scale(.4);transition:opacity .2s,transform .2s}
 .task.done .box svg{opacity:1;transform:scale(1)}
 .num{padding-top:5px;min-width:2ch;font-variant-numeric:tabular-nums}
 .txt{padding-top:5px;min-width:0;overflow-wrap:anywhere;transition:opacity .2s}
 .task.done .txt{opacity:.6;text-decoration:line-through;text-decoration-thickness:2px}
-.swap{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.14);color:var(--text);font-size:22px;line-height:1;display:grid;place-items:center}
-.swap:hover{background:rgba(255,255,255,.24)}
 .empty{text-align:center;color:var(--soft);border:2px dashed rgba(255,255,255,.4);border-radius:12px;padding:26px 16px}
 .progress{text-align:center;color:var(--soft);font-size:18px}
 .win{text-align:center;font-family:var(--title);font-weight:700;font-size:28px;color:var(--orange);text-shadow:0 2px 0 var(--shadow)}
@@ -56,12 +54,20 @@ footer{margin-top:auto;display:flex;flex-direction:column;align-items:center;pad
 .logo{font-family:var(--logo);font-weight:800;font-size:44px;letter-spacing:.02em;line-height:1}
 .logo-shadow{width:150px;height:10px;border-radius:50%;background:radial-gradient(closest-side,rgba(6,24,60,.45),transparent);margin-top:6px}
 @media (max-width:560px){
-  body{font-size:19px}
-  .wrap{gap:22px}
-  .draw{align-self:stretch}
-  .task{grid-template-columns:auto 1fr auto;gap:10px 12px}
+  body{font-size:19px;background-attachment:scroll}
+  .wrap{gap:20px;padding-block:calc(22px + env(safe-area-inset-top,0px)) calc(22px + env(safe-area-inset-bottom,0px))}
+  header{gap:6px}
+  h1{font-size:clamp(26px,8.2vw,40px);white-space:nowrap}
+  header svg{width:clamp(40px,11vw,56px)}
+  .sub{font-size:17px;margin-top:-8px}
+  .draw{align-self:stretch;min-height:58px;font-size:22px}
+  ol.tasks{gap:14px}
+  .task{grid-template-columns:auto 1fr;gap:12px;background:rgba(255,255,255,.08);border-radius:12px;padding:12px}
   .num{display:none}
-  .box{width:40px;height:40px}
+  .box{width:42px;height:42px}
+  .txt{padding-top:6px;font-size:19px;line-height:1.35}
+  .win{font-size:24px}
+  .logo{font-size:38px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -80,7 +86,7 @@ footer{margin-top:auto;display:flex;flex-direction:column;align-items:center;pad
       <path d="M31 22 L77 22 L78 30 L30 30 Z" fill="#f2f2f2"/>
     </svg>
   </header>
-  <p class="sub"><span class="em">Emsi</span>'ye hoş geldin! Rastgele 3 görev çek, hepsini tamamla.</p>
+  <p class="sub"><span class="em">Emsi</span>'ye hoş geldin! Rastgele 3 görev çek, hepsini tamamla. Çektiğin görevler değiştirilemez!</p>
 
   <button class="draw" id="draw">3 GÖREV ÇEK</button>
 
@@ -127,12 +133,6 @@ function esc(s){const d=document.createElement('div');d.textContent=s;return d.i
 function fmt(s){return esc(s).replace(/(Emsi|EMSÎ|emsi)(?=[^a-zA-ZçğıöşüÇĞİÖŞÜ]|$)/g,'<span class="em">$1</span>')}
 
 function draw(){ drawn = shuffle(POOL).slice(0, N).map(t => ({ t, done: false })); save(); render(); }
-function swap(i){
-  const used = new Set(drawn.map(d => d.t));
-  const c = POOL.filter(t => !used.has(t));
-  if (!c.length) return;
-  drawn[i] = { t: c[Math.random() * c.length | 0], done: false }; save(); render();
-}
 function render(){
   const ol = $("tasks"), n = drawn.length, done = drawn.filter(d => d.done).length;
   ol.innerHTML = n ? drawn.map((d, i) => `
@@ -140,19 +140,17 @@ function render(){
       <button class="box" data-c="${i}" aria-pressed="${d.done}" aria-label="Tamamlandı olarak işaretle">${CHECK}</button>
       <span class="num">${i + 1}-</span>
       <span class="txt">${fmt(d.t)}</span>
-      <button class="swap" data-s="${i}" aria-label="Bu görevi değiştir" title="Görevi değiştir">↻</button>
     </li>`).join("")
     : '<li class="empty">“3 Görev Çek”e bas, görevlerin burada belirsin.</li>';
   $("progress").hidden = !n;
   $("progress").textContent = `${done} / ${n} görev tamamlandı`;
   $("win").hidden = !(n && done === n);
-  $("draw").textContent = n ? "YENİDEN ÇEK" : "3 GÖREV ÇEK";
+  $("draw").hidden = !!n;
 }
 document.addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;
-  if (b.id === "draw") draw();
+  if (b.id === "draw" && !drawn.length) draw();
   else if (b.dataset.c != null) { const d = drawn[+b.dataset.c]; d.done = !d.done; save(); render(); }
-  else if (b.dataset.s != null) swap(+b.dataset.s);
 });
 render();
 </script>
