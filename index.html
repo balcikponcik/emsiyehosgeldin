@@ -93,6 +93,7 @@ footer{margin-top:auto;display:flex;flex-direction:column;align-items:center;pad
   <ol class="tasks" id="tasks"></ol>
   <div class="progress" id="progress" hidden></div>
   <div class="win" id="win" hidden>Tebrikler, artık sen de <span class="em">Emsi</span>'lisin!</div>
+  <button class="draw" id="again" hidden>YENİ GÖREVLER ÇEK</button>
 
   <footer>
     <div class="logo" aria-label="EMSÎ">EMSÎ</div>
@@ -145,11 +146,13 @@ function render(){
   $("progress").hidden = !n;
   $("progress").textContent = `${done} / ${n} görev tamamlandı`;
   $("win").hidden = !(n && done === n);
+  $("again").hidden = !(n && done === n);
   $("draw").hidden = !!n;
 }
 document.addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;
   if (b.id === "draw" && !drawn.length) draw();
+  else if (b.id === "again" && drawn.length && drawn.every(d => d.done)) { draw(); window.scrollTo({ top: 0, behavior: "smooth" }); }
   else if (b.dataset.c != null) { const d = drawn[+b.dataset.c]; d.done = !d.done; save(); render(); }
 });
 render();
