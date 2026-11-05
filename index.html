@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Emsi'ye Hoş Geldin</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Figtree:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+*,*::before,*::after{box-sizing:border-box}body{margin:0}
+/* Layout: tek sütun "görev pasaportu" — üstte çekiliş, altta damgalanan görev biletleri */
+:root{
+  --bg:#e8f0fc; --paper:#ffffff; --ink:#0c2252; --muted:#4c6290; --line:#c6d6f0;
+  --accent:#1d5fd8; --accent-ink:#ffffff; --done:#0a86c9; --soft:#d8e5f8;
+  --display:"Bricolage Grotesque",system-ui,sans-serif;
+  --body:"Figtree",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#08142e; --paper:#10224a; --ink:#e6eeff; --muted:#93a8d6; --line:#22396d;
+  --accent:#5c9cff; --accent-ink:#04102a; --done:#4cc3ff; --soft:#1a2d5c; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#08142e; --paper:#10224a; --ink:#e6eeff; --muted:#93a8d6; --line:#22396d;
+  --accent:#5c9cff; --accent-ink:#04102a; --done:#4cc3ff; --soft:#1a2d5c; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
+.wrap{max-width:720px;margin:0 auto;padding-block:32px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:28px}
+header{display:flex;flex-direction:column;gap:8px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(36px,8vw,60px);line-height:1;margin:0;text-wrap:balance;letter-spacing:-.02em}
+.lede{color:var(--muted);margin:0;max-width:60ch}
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+input[type=text]{font:inherit;color:var(--ink);background:var(--paper);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;min-width:0;flex:1 1 200px}
+input[type=text]:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+button{font:inherit;font-weight:700;cursor:pointer;border-radius:10px;padding:10px 16px;border:1.5px solid var(--ink);background:transparent;color:var(--ink)}
+button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-size:17px;padding:12px 20px}
+button.small{padding:6px 10px;font-size:13px;font-weight:500;border-color:var(--line);color:var(--muted)}
+button:hover{filter:brightness(1.06)}
+.status{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:13px;color:var(--muted)}
+.bar{height:8px;background:var(--soft);border-radius:99px;overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--done);width:0;transition:width .4s}
+ol.tickets{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.ticket{position:relative;display:grid;grid-template-columns:56px 1fr auto;align-items:center;background:var(--paper);border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ticket .no{align-self:stretch;display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:24px;color:var(--accent);border-right:2px dashed var(--line)}
+.ticket .txt{padding:16px 14px;min-width:0;font-weight:500}
+.ticket .acts{display:flex;gap:6px;padding-right:12px}
+.ticket .stamp{position:absolute;right:90px;top:50%;transform:translateY(-50%) rotate(-12deg) scale(1.6);opacity:0;pointer-events:none;font-family:var(--display);font-weight:800;font-size:18px;letter-spacing:.08em;color:var(--done);border:3px solid var(--done);border-radius:8px;padding:2px 10px;transition:transform .25s,opacity .25s}
+.ticket.done .stamp{opacity:.9;transform:translateY(-50%) rotate(-12deg) scale(1)}
+.ticket.done .txt{color:var(--muted);text-decoration:line-through;text-decoration-thickness:1.5px}
+.check{width:40px;height:40px;padding:0;display:grid;place-items:center;border-radius:50%;border-color:var(--line);font-size:18px}
+.ticket.done .check{background:var(--done);border-color:var(--done);color:var(--paper)}
+@media (max-width:480px){.ticket .stamp{right:60px;font-size:14px}.ticket{grid-template-columns:44px 1fr auto}.ticket .no{font-size:20px}}
+.empty{border:1.5px dashed var(--line);border-radius:14px;padding:28px;text-align:center;color:var(--muted)}
+.win{background:var(--done);color:var(--paper);border-radius:14px;padding:16px 18px;font-weight:700;font-family:var(--display);font-size:20px}
+details.pool{background:var(--paper);border:1.5px solid var(--line);border-radius:14px;padding:4px 18px}
+details.pool summary{cursor:pointer;padding:12px 0;font-family:var(--display);font-weight:800;font-size:20px}
+.pool-body{display:flex;flex-direction:column;gap:14px;padding-bottom:18px}
+.pool ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.pool li{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
+.pool li span{flex:1;min-width:0}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:1px 6px}
+.pool li.off span{color:var(--muted);text-decoration:line-through}
+.hint{font-size:14px;color:var(--muted);margin:0}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Oryantasyon · Görev Pasaportu</div>
+    <h1>Emsi'ye Hoş Geldin!</h1>
+    <p class="lede">Havuzdan rastgele 3 görev çek, hepsini tamamla, pasaportunu damgalat. Bir görevi beğenmediysen tek tıkla yenisini çekebilirsin.</p>
+  </header>
+
+  <div class="controls">
+    <button class="primary" id="draw">🎲 3 Görev Çek</button>
+  </div>
+
+  <section style="display:flex;flex-direction:column;gap:12px">
+    <div class="status"><span id="who">Henüz görev çekilmedi</span><span id="count">0 / 0</span></div>
+    <div class="bar"><i id="fill"></i></div>
+    <ol class="tickets" id="tickets"></ol>
+    <div id="win" class="win" hidden></div>
+  </section>
+
+</div>
+
+<script>
+const DEFAULT = [
+  {t:"5 kişiyi bir araya topla ve fotoğraf çek",s:0},
+  {t:"etkinlik alanında oryantasyon liderini bul ve fotoğraf çek",s:0},
+  {t:"emsi'de 2 yıl ve üzeri bir kişiyi bul ve ona bir içki ısmarlat",s:0},
+  {t:"kalabalık bir grup içerisinde Çağrı göttür diye bağır",s:0},
+  {t:"mavi giyen 1 kişi bul ve fotoğraf çektir",s:0},
+  {t:"bir bardak su iç",s:0},
+].map(x=>({...x,on:true}));
+const KEY="emsi-oyun-v4";
+const N=3;
+let st={pool:DEFAULT.map(x=>({...x})),drawn:[]};
+try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&Array.isArray(s.drawn))st.drawn=s.drawn;}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
+const $=id=>document.getElementById(id);
+const active=()=>st.pool.filter(p=>p.on).map(p=>p.t);
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a}
+function draw(){const a=active();if(!a.length)return;st.drawn=shuffle(a).slice(0,N).map(t=>({t,done:false}));save();render()}
+function reroll(i){const used=new Set(st.drawn.map(d=>d.t));const c=active().filter(t=>!used.has(t));if(!c.length)return;st.drawn[i]={t:c[Math.random()*c.length|0],done:false};save();render()}
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function render(){
+  const ol=$("tickets");const n=st.drawn.length,d=st.drawn.filter(x=>x.done).length;
+  if(!n){ol.innerHTML='<li class="empty">“3 Görev Çek”e bas, görevlerin burada belirsin.</li>'}
+  else ol.innerHTML=st.drawn.map((x,i)=>`<li class="ticket${x.done?' done':''}"><div class="no">${i+1}</div><div class="txt">${esc(x.t)}</div><div class="acts"><button class="small" data-r="${i}" title="Bu görevi değiştir" aria-label="Görevi değiştir">↻</button><button class="check" data-c="${i}" aria-label="Tamamlandı olarak işaretle">✓</button></div><span class="stamp">TAMAM</span></li>`).join("");
+  $("count").textContent=`${d} / ${n}`;$("fill").style.width=n?(d/n*100)+"%":"0";
+  $("who").textContent=n?"Görevlerin":"Henüz görev çekilmedi";
+  $("win").hidden=!(n&&d===n);$("win").textContent=`🎉 Tebrikler! Tüm görevleri tamamladın, artık resmen Emsi'lisin.`;
+  const a=active().length;
+  $("draw").textContent=`🎲 ${a<N&&a>0?a:N} Görev Çek`;
+}
+document.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
+  if(b.id==="draw")draw();
+  else if(b.dataset.c!=null){const x=st.drawn[+b.dataset.c];x.done=!x.done;save();render()}
+  else if(b.dataset.r!=null)reroll(+b.dataset.r);
+  else if(b.dataset.t!=null){const p=st.pool[+b.dataset.t];p.on=!p.on;save();render()}
+  else if(b.dataset.x!=null){st.pool.splice(+b.dataset.x,1);save();render()}
+  else if(b.id==="addTask")add();
+  else if(b.id==="reset"){st.pool=DEFAULT.map(x=>({...x}));save();render()}
+});
+function add(){const v=$("newTask").value.trim();if(!v)return;st.pool.unshift({t:v,s:0,on:true});$("newTask").value="";save();render()}
+render();
+</script>
+
+</body>
+</html>
