@@ -10,14 +10,14 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Emsi Oyun">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chewy&family=Gochi+Hand&family=Montserrat:wght@800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mali:wght@700&family=Patrick+Hand&family=Montserrat:wght@800&display=swap">
 <style>
 /* Layout: "Görevi Tamamla" afişi — mavi radyal zemin, el yazısı beyaz metin, kareli onay kutulu liste, altta EMSÎ */
 :root{
   --deep:#1f4f93; --mid:#0d7cc6; --text:#ffffff; --soft:rgba(255,255,255,.78);
   --box:#e9e9ea; --box-ink:#1f4f93; --orange:#f7a23b; --shadow:rgba(6,24,60,.35);
-  --title:"Chewy","Comic Sans MS",cursive;
-  --hand:"Gochi Hand","Comic Sans MS",cursive;
+  --title:"Mali","Comic Sans MS",cursive;
+  --hand:"Patrick Hand","Comic Sans MS",cursive;
   --logo:"Montserrat",system-ui,sans-serif;
   color-scheme:dark;
 }
@@ -30,14 +30,14 @@ body{margin:0;min-height:100dvh;color:var(--text);font-family:var(--hand);font-s
   padding-block:calc(28px + env(safe-area-inset-top,0px)) calc(28px + env(safe-area-inset-bottom,0px));
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 header{display:flex;align-items:center;justify-content:center;gap:10px;text-align:center}
-h1{font-family:var(--title);font-weight:400;font-size:clamp(40px,10vw,74px);line-height:1;margin:0;letter-spacing:.02em;text-shadow:0 3px 0 var(--shadow)}
+h1{font-family:var(--title);font-weight:700;font-size:clamp(40px,10vw,74px);line-height:1;margin:0;letter-spacing:.02em;text-shadow:0 3px 0 var(--shadow)}
 header svg{width:clamp(54px,12vw,92px);height:auto;flex:none;filter:drop-shadow(0 3px 2px var(--shadow))}
 .sub{margin:-12px 0 0;text-align:center;color:var(--soft);font-size:19px}
 .em{color:var(--orange)}
 button{font:inherit;cursor:pointer;touch-action:manipulation;border:0}
 button:focus-visible{outline:3px solid var(--orange);outline-offset:3px}
 .draw{align-self:center;min-height:54px;padding:10px 30px;border-radius:14px;background:var(--orange);color:#3a2200;
-  font-family:var(--title);font-size:26px;letter-spacing:.03em;box-shadow:0 5px 0 #c97a17,0 8px 18px var(--shadow);transition:transform .1s,box-shadow .1s}
+  font-family:var(--title);font-weight:700;font-size:24px;letter-spacing:.03em;box-shadow:0 5px 0 #c97a17,0 8px 18px var(--shadow);transition:transform .1s,box-shadow .1s}
 .draw:active{transform:translateY(4px);box-shadow:0 1px 0 #c97a17,0 3px 8px var(--shadow)}
 ol.tasks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:18px}
 .task{display:grid;grid-template-columns:auto auto 1fr auto;align-items:start;gap:14px}
@@ -51,7 +51,7 @@ ol.tasks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;g
 .swap:hover{background:rgba(255,255,255,.24)}
 .empty{text-align:center;color:var(--soft);border:2px dashed rgba(255,255,255,.4);border-radius:12px;padding:26px 16px}
 .progress{text-align:center;color:var(--soft);font-size:18px}
-.win{text-align:center;font-family:var(--title);font-size:28px;color:var(--orange);text-shadow:0 2px 0 var(--shadow)}
+.win{text-align:center;font-family:var(--title);font-weight:700;font-size:28px;color:var(--orange);text-shadow:0 2px 0 var(--shadow)}
 footer{margin-top:auto;display:flex;flex-direction:column;align-items:center;padding-top:20px}
 .logo{font-family:var(--logo);font-weight:800;font-size:44px;letter-spacing:.02em;line-height:1}
 .logo-shadow{width:150px;height:10px;border-radius:50%;background:radial-gradient(closest-side,rgba(6,24,60,.45),transparent);margin-top:6px}
