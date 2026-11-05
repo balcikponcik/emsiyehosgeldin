@@ -114,8 +114,13 @@ const DEFAULT = [
   {t:"kalabalık bir grup içerisinde Çağrı göttür diye bağır",s:0},
   {t:"mavi giyen 1 kişi bul ve fotoğraf çektir",s:0},
   {t:"bir bardak su iç",s:0},
+  {t:"Oryantasyon liderinle fotoğraf çekil, Emsi Story’de paylaş.",s:0},
+  {t:"Arzumsu'yu bul.",s:0},
+  {t:"En az 1 yıldır EMSÎ üyesi olan bir arkadaşımızı bul, seni 3 eski üyeyle tanıştırsın.",s:0},
+  {t:"Emsi Tweet’e “Buradayım be buradayım! #artıkemsiliyim” yazıp paylaş!",s:0},
+  {t:"Ve en önemlisi, bolca eğlen!",s:0},
 ].map(x=>({...x,on:true}));
-const KEY="emsi-oyun-v4";
+const KEY="emsi-oyun-v5";
 const N=3;
 let st={pool:DEFAULT.map(x=>({...x})),drawn:[]};
 try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&Array.isArray(s.drawn))st.drawn=s.drawn;}catch(e){}
