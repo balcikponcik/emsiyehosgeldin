@@ -96,14 +96,14 @@ footer{margin-top:auto;display:flex;flex-direction:column;align-items:center;pad
       <path d="M31 22 L77 22 L78 30 L30 30 Z" fill="#f2f2f2"/>
     </svg>
   </header>
-  <p class="sub"><span class="em">Emsi</span>'ye hoş geldin! 5 görevin var, sırayla tamamla. Görevler değiştirilemez!</p>
+  <p class="sub"><span class="em">Emsi</span>'ye hoş geldin! 5 görevin var, her biri sen bir öncekini yapınca gelecek. Görevler değiştirilemez!</p>
 
   <div class="steps" id="steps" hidden></div>
   <div class="meter" id="meter" hidden></div>
 
   <div id="stage"></div>
 
-  <button class="draw" id="draw">GÖREVLERİMİ ÇEK</button>
+  <button class="draw" id="draw">İLK GÖREVİMİ ÇEK</button>
 
   <div id="doneBox" hidden>
     <div class="donehead">TAMAMLANANLAR</div>
@@ -137,7 +137,7 @@ const POOL = [
   "En az 20 kişiyle tanış, aynı meslekten 2 kişiyi tanıştır",
   "Emsi Tweet’e “Görevi tamamladım, artık ben de Emsi’liyim” yaz",
 ];
-const N = 5, KEY = "emsi-oyun-v7";
+const N = 5, KEY = "emsi-oyun-v8";
 let drawn = [];
 try { const s = JSON.parse(localStorage.getItem(KEY)); if (Array.isArray(s)) drawn = s.filter(d => POOL.includes(d.t)); } catch (e) {}
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(drawn)); } catch (e) {} };
@@ -148,20 +148,21 @@ function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.rando
 function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
 function fmt(s){return esc(s).replace(/(Emsi|EMSÎ|emsi)(?=[^a-zA-ZçğıöşüÇĞİÖŞÜ]|$)/g,'<span class="em">$1</span>')}
 
-function draw(){ drawn = shuffle(POOL).slice(0, N).map(t => ({ t, done: false })); save(); render(); window.scrollTo({ top: 0, behavior: "smooth" }); }
+function pick(){ const used = new Set(drawn.map(d => d.t)); const c = POOL.filter(t => !used.has(t)); return c[Math.random() * c.length | 0]; }
+function draw(){ drawn = []; drawn.push({ t: pick(), done: false }); save(); render(); window.scrollTo({ top: 0, behavior: "smooth" }); }
 function render(){
-  const n = drawn.length, done = drawn.filter(d => d.done).length, cur = drawn.findIndex(d => !d.done), finished = n && cur === -1;
+  const n = drawn.length ? N : 0, done = drawn.filter(d => d.done).length, cur = drawn.findIndex(d => !d.done), finished = done === N;
   $("steps").hidden = $("meter").hidden = !n;
-  $("steps").innerHTML = drawn.map((d, i) =>
-    `<div class="step${d.done ? ' done' : ''}${i === cur ? ' now' : ''}" aria-label="Görev ${i + 1}${d.done ? ' tamamlandı' : ''}">${d.done ? CHECK : i + 1}</div>`).join("");
+  $("steps").innerHTML = Array.from({ length: n }, (_, i) => { const d = drawn[i] || {};
+    return `<div class="step${d.done ? ' done' : ''}${i === cur ? ' now' : ''}" aria-label="Görev ${i + 1}${d.done ? ' tamamlandı' : ''}">${d.done ? CHECK : (i === cur ? i + 1 : '?')}</div>`; }).join("");
   $("meter").textContent = finished ? `${n} / ${n} görev tamamlandı` : `${done} / ${n} görev tamamlandı`;
 
-  if (!n) $("stage").innerHTML = '<div class="empty">“Görevlerimi Çek”e bas, ilk görevin gelsin.</div>';
+  if (!n) $("stage").innerHTML = '<div class="empty">“İlk Görevimi Çek”e bas, ilk görevin gelsin.</div>';
   else if (finished) $("stage").innerHTML = '<div class="win">Tebrikler, artık sen de <span class="em">Emsi</span>\'lisin!</div>';
   else $("stage").innerHTML = `<div class="card" key="${cur}"><div class="label">GÖREV ${cur + 1} / ${n}</div><div class="txt">${fmt(drawn[cur].t)}</div></div>`;
 
   const b = $("draw");
-  b.textContent = !n ? "GÖREVLERİMİ ÇEK" : finished ? "YENİ GÖREVLER ÇEK" : "YAPTIM ✓";
+  b.textContent = !n ? "İLK GÖREVİMİ ÇEK" : finished ? "YENİ GÖREVLER ÇEK" : "YAPTIM ✓";
   b.dataset.mode = !n ? "draw" : finished ? "again" : "next";
 
   const list = drawn.filter(d => d.done);
@@ -171,7 +172,7 @@ function render(){
 $("draw").addEventListener("click", e => {
   const m = e.currentTarget.dataset.mode;
   if (m === "draw" || m === "again") draw();
-  else if (m === "next") { const i = drawn.findIndex(d => !d.done); if (i > -1) { drawn[i].done = true; save(); render(); } }
+  else if (m === "next") { const i = drawn.findIndex(d => !d.done); if (i > -1) { drawn[i].done = true; if (drawn.length < N) drawn.push({ t: pick(), done: false }); save(); render(); } }
 });
 render();
 </script>
