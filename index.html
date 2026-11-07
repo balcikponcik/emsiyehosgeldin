@@ -68,8 +68,8 @@ footer{margin-top:auto;display:flex;flex-direction:column;align-items:center;pad
   body{font-size:19px;background-attachment:scroll}
   .wrap{gap:20px;padding-block:calc(22px + env(safe-area-inset-top,0px)) calc(22px + env(safe-area-inset-bottom,0px))}
   header{gap:6px}
-  h1{font-size:clamp(26px,8.2vw,40px);white-space:nowrap}
-  header svg{width:clamp(40px,11vw,56px)}
+  h1{font-size:clamp(22px,7vw,38px);white-space:nowrap}
+  header svg{width:clamp(34px,9.5vw,52px)}
   .sub{font-size:17px;margin-top:-8px}
   .draw{align-self:stretch;min-height:58px;font-size:22px}
   .steps{gap:8px}
@@ -86,7 +86,7 @@ footer{margin-top:auto;display:flex;flex-direction:column;align-items:center;pad
 
 <div class="wrap">
   <header>
-    <h1>GÖREVİ TAMAMLA</h1>
+    <h1>GÖREVLERİ TAMAMLA</h1>
     <svg viewBox="0 0 100 90" aria-hidden="true">
       <circle cx="58" cy="52" r="24" fill="#cfe2f5" stroke="#2b2f36" stroke-width="7"/>
       <circle cx="58" cy="52" r="15" fill="#e8f2fb" opacity=".7"/>
@@ -135,11 +135,11 @@ const POOL = [
   "En az iki senedir toplulukta olan birinden sana bi bira ısmarlamasını iste (ısmarlamazsa göttür)",
   "Yılın Enleri adaylarından birine aday olmanın nasıl hissettirdiğini sor",
   "En az 20 kişiyle tanış, aynı meslekten 2 kişiyi tanıştır",
-  "Emsi Tweet’e “Görevi tamamladım, artık ben de Emsi’liyim” yaz",
 ];
-const N = 5, KEY = "emsi-oyun-v8";
+const LAST = "Emsi Tweet’e “Görevi tamamladım, artık ben de Emsi’liyim” yaz";
+const N = 5, KEY = "emsi-oyun-v9";
 let drawn = [];
-try { const s = JSON.parse(localStorage.getItem(KEY)); if (Array.isArray(s)) drawn = s.filter(d => POOL.includes(d.t)); } catch (e) {}
+try { const s = JSON.parse(localStorage.getItem(KEY)); if (Array.isArray(s)) drawn = s.filter(d => POOL.includes(d.t) || d.t === LAST); } catch (e) {}
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(drawn)); } catch (e) {} };
 const $ = id => document.getElementById(id);
 const CHECK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 6" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -172,7 +172,7 @@ function render(){
 $("draw").addEventListener("click", e => {
   const m = e.currentTarget.dataset.mode;
   if (m === "draw" || m === "again") draw();
-  else if (m === "next") { const i = drawn.findIndex(d => !d.done); if (i > -1) { drawn[i].done = true; if (drawn.length < N) drawn.push({ t: pick(), done: false }); save(); render(); } }
+  else if (m === "next") { const i = drawn.findIndex(d => !d.done); if (i > -1) { drawn[i].done = true; if (drawn.length < N) drawn.push({ t: drawn.length === N - 1 ? LAST : pick(), done: false }); save(); render(); } }
 });
 render();
 </script>
